@@ -1,0 +1,20 @@
+{
+  "name": "package",
+  "version": "1.0.0",
+  "description": "This is a backend project being from Youtube.",
+  "keywords": [
+    "Javascript",
+    "Backend",
+    "NodeJS",
+    "ExpressJS",
+    "Learn",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "Shivam Karn",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
