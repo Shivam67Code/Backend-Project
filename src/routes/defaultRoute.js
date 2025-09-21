@@ -1,5 +1,9 @@
+
 const defaultRoute = (req, res) => {
-  const htmlContent = `
+
+
+
+    const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -118,18 +122,18 @@ const defaultRoute = (req, res) => {
     </html>
   `;
 
-  res.status(200).send(htmlContent);
+    res.status(200).send(htmlContent);
 };
 
 const healthRoute = (req, res) => {
-  const uptime = process.uptime();
-  const uptimeFormatted = {
-    hours: Math.floor(uptime / 3600),
-    minutes: Math.floor(uptime % 3600 / 60),
-    seconds: Math.floor(uptime % 60)
-  };
+    const uptime = process.uptime();
+    const uptimeFormatted = {
+        hours: Math.floor(uptime / 3600),
+        minutes: Math.floor(uptime % 3600 / 60),
+        seconds: Math.floor(uptime % 60)
+    };
 
-  const htmlContent = `
+    const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -383,7 +387,10 @@ const healthRoute = (req, res) => {
     </html>
   `;
 
-  res.status(200).send(htmlContent);
+    res.status(200).send(htmlContent);
+    res.status(200).json({
+        message: "Server is running smooth"
+    })
 }
 
 export { defaultRoute, healthRoute };
