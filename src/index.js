@@ -20,6 +20,7 @@ connectDB()
 
     app.get('/', defaultRoute);
     app.get("/health", healthRoute);
+    app.get("/api/health", healthRoute);
   })
   .catch((err) => {
     console.log("Mongo DB connection failed !!!", err);
