@@ -3,8 +3,13 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import { validateLocaleAndSetLanguage } from "typescript";
 
 const registerUser = asyncHandler(async (req, res) => {
+  // debug kara lagi consoles
+  console.log("req.body is  : ", req.body);
+  // console.log("req.files are : ", req.files);
+  // console.log("Content-type : ", req.headers['content-type']);
   // Sabsa pahila ta get USER DETAIL from frontend(postman)
   const { fullName, email, password, username } = req.body
   console.log("email", email);
@@ -23,7 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please provide a valid email address !! ")
   }
   // CHECK if user ALREADY EXISTS : username,email
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }]
   })
   console.log(existedUser)
@@ -31,10 +36,23 @@ const registerUser = asyncHandler(async (req, res) => {
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exists")
   }
+  console.log(req.files);
   // CHECK for IMAGES , check for avatar
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  console.log(req.files)
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  // const avatarLocalPath = req.files?.avatar[0]?.path;
+  // console.log(req.files)
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+  let avatarLocalPath;
+  if (req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0) {
+    avatarLocalPath = req.files.avatar[0].path
+  }
+
+
+
+  let coverImageLocalPath;
+  if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    coverImageLocalPath = req.files.coverImage[0].path
+  }
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required");
