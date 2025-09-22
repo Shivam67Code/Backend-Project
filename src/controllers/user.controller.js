@@ -2,14 +2,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
-
-
+import { ApiResponse } from "../utils/ApiResponse.js"
 
 const registerUser = asyncHandler(async (req, res) => {
   // Sabsa pahila ta get USER DETAIL from frontend(postman)
   const { fullName, email, password, username } = req.body
   console.log("email", email);
-  // VALIDATION that if email is correct and none field is empty
+  // Okr baad check VALIDATION that if email is correct and none field is empty
   // either check all one by one
   // if (fullName === "") {
   //   throw new ApiError(400, "FullName is required")
@@ -41,11 +40,34 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Avatar file is required");
   }
   // if there is avatar then UPLOAD them to cloudinary 
-
+  const avatar = await uploadOnCloudinary(avatarLocalPath)
+  const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+  if (!avatar) {
+    throw new ApiError(400, "Avatar File is required")
+  }
   // create user object - create ENTERY IN DB
+  const user = await User.create({
+    fullName,
+    avatar: avatar.url,
+    coverImage: coverImage?.url || "",
+    email,
+    password,
+    username: username.toLowerCase()
+  })
+
   // remove password and refresh token field from response
+  const checkCreatedUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  )
   // check for user creation
+  if (!checkCreatedUser) {
+    throw new ApiError(500, "Something went wrong while registring User.")
+  }
   // return response
+  return res.status(201).json(
+    new ApiResponse(200, checkCreatedUser, "User registred Successfully")
+  )
+
 
 
 })
