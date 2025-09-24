@@ -25,7 +25,7 @@ app.use(express.urlencoded({
 app.use(express.static("public"))
 
 // server sa user k browser sa cookies access and set kariske so using this
-app.use(cookieParser())
+app.use(cookieParser()) // Make sure this line exists and comes before your routes
 
 
 
@@ -37,4 +37,4 @@ app.use("/api/v1/users", userRouter) //http://localhost:8000/api/v1/users
 
 
 
-export { app } 
+export { app }
