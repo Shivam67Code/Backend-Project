@@ -49,8 +49,6 @@ const registerUser = asyncHandler(async (req, res) => {
     avatarLocalPath = req.files.avatar[0].path
   }
 
-
-
   let coverImageLocalPath;
   if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
     coverImageLocalPath = req.files.coverImage[0].path
@@ -61,7 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   // 6. if there is avatar then UPLOAD them to cloudinary 
   const avatar = await uploadOnCloudinary(avatarLocalPath)
-  const coverImage = await uploadOnClo + udinary(coverImageLocalPath)
+  const coverImage = await uploadOnCloudinary(coverImageLocalPath)
   if (!avatar) {
     throw new ApiError(400, "Avatar File is required")
   }
@@ -110,7 +108,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   // 1. Sabsa pahila req body sa data 
-  const { fullName, username, email } = req.body;
+  const { fullName, username, password, email } = req.body;
   // 2. Username or email
   // Either use ! and && Or use !(username  || email )
   if (!username && !email) {
@@ -119,7 +117,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   // 3. Find the user
   const user = await User.findOne({
-    $or: [{ username, email }]
+    $or: [{ username }, { email }]
   })
   if (!user) {
     throw new ApiError(404, "User doesn't Exist")
