@@ -73,13 +73,13 @@ const registerUser = asyncHandler(async (req, res) => {
     username: username.toLowerCase()
   })
 
-  // 8.  remove password and refresh token field from response
+  // 8.  remove password and refreshtoken field from response
   const checkCreatedUser = await User.findById(user._id).select(
     "-password -refreshToken"
   )
   // check for user creation
   if (!checkCreatedUser) {
-    throw new ApiError(500, "Something went wrong while registring User.")
+    throw new ApiError(500, "Something went wrong while registring/creating User.")
   }
   //9.  return response
   return res.status(201).json(
