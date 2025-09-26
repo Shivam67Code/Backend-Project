@@ -17,7 +17,6 @@ import {
 
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { verify } from "crypto";
 
 
 const router = Router()
@@ -65,4 +64,7 @@ router.route("/channel/:username")
 
 router.route("/watch-history")
   .get(verifyJWT, getWatchHistory)
+
+
+
 export default router
